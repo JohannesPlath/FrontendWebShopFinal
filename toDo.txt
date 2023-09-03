@@ -1,0 +1,84 @@
+endpunkte des backends/GateWay
+
+done - GET/allProducts/ -> wareHouseBackend // await axios.get("http://localhost:8080/product")
+done - GET/CartStatus/{USERID}  schickt  an
+       /cart/fetchCartOfUser/ + "changeAtCartDTO  mit User id " und bekommt CartOfUserDTO zurück
+done - Post/ProductToCart    // axios.post("http://localhost:8080/cart/ProductToCart/", changeAtCartDTO)
+done - Post/ProductFromCart/ ggf als json /DTO
+- (to CartService) DELETE/Order{userID}
+done - Sync LogIn:  POST/login/userdata (als Json: nur cridentials)  -> keycloak //axios.post("http://localhost:8080/user/login/",  accountDTO)
+done - Sync Register:  PUT/register/userdata (als Json: alle daten)  -> keycloak
+done - sync lockout: axios.post("http://localhost:8080/user/logout/", accountDTO) mit userId in account dto
+done   ChoosePayment (sync): POST/paymentStore/payment/ + new PaymentDTO(userId:uuid, payment:String)
+done - Post/finalize{finalizeDTO}?? nötig ??
+ Post/deleteOrder/{userID}
+
+----------------------------------
+
+umbau am Frontend:
+done - loginPage (mail/passw) vor Accountpage / Registrierung
+done - shop sperren ohne Registrierung
+done - cart infos aus Backend beziehen - abrufen der CartBackend infos zu einem user
+done - nachricht an CartBackend bei "AddToCart"
+
+ DTOs definieren:
+
+export class ChangeAtCartDTO {
+
+  constructor(productId, userID, count) {
+    this.productId = productId;
+    this.userID = userID;
+    this.count = count;
+  }
+}
+
+export class ProductModel {
+
+  constructor(uuid, title, currency, category, count, price, description, picUrl, countForCart) {
+    this.uuid = uuid;
+    this.title = title;
+    this.currency = currency;
+    this.category = category;
+    this.count = count;
+    this.price = price;
+    this.description = description;
+    this.picUrl = picUrl;
+    this.countForCart = countForCart;
+
+  }
+}
+
+export class AccountDTO{
+
+  constructor(userID, firstname, familyName, address, city, state, zip, country, mail, password) {
+    this.userID = userID;
+    this.firstname = firstname;
+    this.familyName = familyName;
+    this.address = address;
+    this.city = city;
+    this.state = state;
+    this.zip = zip;
+    this.country = country;
+    this.mail = mail;
+    this.password = password;
+     this.newPassword = newPassword;     // neues argument für passwort änderung!!!
+  }
+}
+
+export class ChangeAtCartDTO {
+
+  constructor(productId, userID, count) {
+    this.productId = productId;
+    this.userID = userID;
+    this.count = count;
+  }
+}
+
+export class FinalizeDTO {
+  constructor(userID, payment, message, hsBeenFinalized) {
+    this.userID = userID;
+    this.payment = payment;
+    this.message = message;
+    this.hasBeenFinalized = hsBeenFinalized;
+  }
+}
